@@ -1,0 +1,12 @@
+{
+  "name": "watch-together-bridge",
+  "version": "1.0.0",
+  "description": "Local bridge: connects WebSocket server to MPV IPC socket",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "socket.io-client": "^4.6.1"
+  }
+}

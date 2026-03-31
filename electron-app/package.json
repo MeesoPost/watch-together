@@ -1,0 +1,38 @@
+{
+  "name": "watch-together",
+  "version": "1.0.0",
+  "description": "Watch movies in sync with friends",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist:mac": "electron-builder --mac",
+    "dist:win": "electron-builder --win"
+  },
+  "dependencies": {
+    "socket.io-client": "^4.6.1"
+  },
+  "devDependencies": {
+    "electron": "^29.0.0",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.watchtogether.app",
+    "productName": "Watch Together",
+    "protocols": {
+      "name": "Watch Together",
+      "schemes": ["watchtogether"]
+    },
+    "mac": {
+      "category": "public.app-category.entertainment",
+      "extraResources": [
+        { "from": "resources/mpv-mac", "to": "mpv" }
+      ]
+    },
+    "win": {
+      "extraResources": [
+        { "from": "resources/mpv-win.exe", "to": "mpv.exe" }
+      ]
+    }
+  }
+}
