@@ -1,11 +1,5 @@
 /* ── Watch Together — Design Tokens ─────────────────────────────────────────
-   Single source of truth for all design decisions.
-   Colors use oklch() for perceptual uniformity.
-   All text/bg pairs verified WCAG 2.1 AA (≥ 4.5:1 contrast ratio).
-   ─────────────────────────────────────────────────────────────────────────── */
-
 /* ── IBM Plex Sans ───────────────────────────────────────────────────────── */
-/* Place woff2 files in: frontend/public/fonts/ibm-plex-sans/               */
 
 @font-face {
   font-family: 'IBM Plex Sans';
@@ -65,8 +59,6 @@
 }
 
 /* ── IBM Plex Mono ───────────────────────────────────────────────────────── */
-/* Place woff2 files in: frontend/public/fonts/ibm-plex-mono/               */
-
 @font-face {
   font-family: 'IBM Plex Mono';
   src: url('/fonts/ibm-plex-mono/ibm-plex-mono-v20-latin-regular.woff2') format('woff2');
@@ -98,23 +90,19 @@
   --border-strong:  oklch(28% 0.032 265);
 
   /* ── Primary — violet ────────────────────────────────────────────────── */
-  /* --text-on-primary on --color-primary: ≈ 5.7:1  ✓ WCAG AA             */
   --color-primary:        oklch(47% 0.22  295);
   --color-primary-dark:   oklch(40% 0.22  293);   /* pressed / hover       */
   --color-primary-light:  oklch(72% 0.14  293);   /* accents, links        */
   --color-primary-subtle: oklch(47% 0.22  295 / 0.14);
 
-  /* ── Text  (all on --bg-base, contrast noted) ────────────────────────── */
   --text-primary:    oklch(95% 0.008 285);   /* ~17:1 — body, headings     */
   --text-secondary:  oklch(73% 0.025 278);   /* ~9:1  — labels, meta       */
   --text-muted:      oklch(58% 0.022 276);   /* ~5.5:1 — hints (≥ 16px)   */
   --text-on-primary: oklch(100% 0 0);        /* white — on primary buttons */
 
-  /* ── Status ──────────────────────────────────────────────────────────── */
   --color-success:        oklch(80% 0.15  162);
   --color-success-subtle: oklch(80% 0.15  162 / 0.12);
 
-  /* ── Gradients ───────────────────────────────────────────────────────── */
   --gradient-title:  linear-gradient(135deg,
     oklch(79% 0.11 296) 0%,
     oklch(72% 0.14 293) 50%,

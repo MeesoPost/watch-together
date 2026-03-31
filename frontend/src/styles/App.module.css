@@ -11,7 +11,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Global focus — never hide it, style it nicely */
+/* Global focus */
 :focus-visible {
   outline: 0.125rem solid var(--color-primary-light);
   outline-offset: 0.1875rem;
@@ -35,8 +35,6 @@ body {
 }
 
 /* ── Buttons ──────────────────────────────────────────────────────────── */
-/* All buttons: min 2.75rem height, visible focus */
-
 .btnPrimary {
   display: inline-flex;
   align-items: center;
@@ -207,7 +205,6 @@ body {
   border-radius: 50%;
   background: var(--color-success);
   flex-shrink: 0;
-  /* Pulse animation for "live" feel */
   animation: pulse 2s ease-in-out infinite;
 }
 
@@ -606,7 +603,6 @@ body {
   font-weight: 700;
   color: var(--text-on-primary);
   flex-shrink: 0;
-  /* Ensure sufficient contrast: white on violet = 5.7:1 ✓ */
 }
 
 /* ── Notifications ────────────────────────────────────────────────────── */
