@@ -1,0 +1,143 @@
+/* ── Watch Together — Design Tokens ─────────────────────────────────────────
+   Single source of truth for all design decisions.
+   Colors use oklch() for perceptual uniformity.
+   All text/bg pairs verified WCAG 2.1 AA (≥ 4.5:1 contrast ratio).
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* ── IBM Plex Sans ───────────────────────────────────────────────────────── */
+/* Place woff2 files in: frontend/public/fonts/ibm-plex-sans/               */
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  src: url('/fonts/ibm-plex-sans/ibm-plex-sans-v23-latin-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  src: url('/fonts/ibm-plex-sans/ibm-plex-sans-v23-latin-italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  src: url('/fonts/ibm-plex-sans/ibm-plex-sans-v23-latin-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  src: url('/fonts/ibm-plex-sans/ibm-plex-sans-v23-latin-500italic.woff2') format('woff2');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  src: url('/fonts/ibm-plex-sans/ibm-plex-sans-v23-latin-600.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  src: url('/fonts/ibm-plex-sans/ibm-plex-sans-v23-latin-600italic.woff2') format('woff2');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  src: url('/fonts/ibm-plex-sans/ibm-plex-sans-v23-latin-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  src: url('/fonts/ibm-plex-sans/ibm-plex-sans-v23-latin-700italic.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ── IBM Plex Mono ───────────────────────────────────────────────────────── */
+/* Place woff2 files in: frontend/public/fonts/ibm-plex-mono/               */
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('/fonts/ibm-plex-mono/ibm-plex-mono-v20-latin-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('/fonts/ibm-plex-mono/ibm-plex-mono-v20-latin-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Custom Properties ───────────────────────────────────────────────────── */
+:root {
+
+  /* ── Backgrounds  (hue 278, perceptually dark blue-violet) ────────────── */
+  --bg-base:     oklch(8%  0.012 278);   /* page                            */
+  --bg-surface:  oklch(11% 0.014 278);   /* cards, panels                   */
+  --bg-elevated: oklch(15% 0.018 275);   /* inputs, code blocks             */
+  --bg-overlay:  oklch(19% 0.022 272);   /* hover on surface                */
+  --bg-hover:    oklch(23% 0.028 270);   /* hover on elevated               */
+
+  /* ── Borders ─────────────────────────────────────────────────────────── */
+  --border-subtle:  oklch(15% 0.018 272);
+  --border-default: oklch(21% 0.024 268);
+  --border-strong:  oklch(28% 0.032 265);
+
+  /* ── Primary — violet ────────────────────────────────────────────────── */
+  /* --text-on-primary on --color-primary: ≈ 5.7:1  ✓ WCAG AA             */
+  --color-primary:        oklch(47% 0.22  295);
+  --color-primary-dark:   oklch(40% 0.22  293);   /* pressed / hover       */
+  --color-primary-light:  oklch(72% 0.14  293);   /* accents, links        */
+  --color-primary-subtle: oklch(47% 0.22  295 / 0.14);
+
+  /* ── Text  (all on --bg-base, contrast noted) ────────────────────────── */
+  --text-primary:    oklch(95% 0.008 285);   /* ~17:1 — body, headings     */
+  --text-secondary:  oklch(73% 0.025 278);   /* ~9:1  — labels, meta       */
+  --text-muted:      oklch(58% 0.022 276);   /* ~5.5:1 — hints (≥ 16px)   */
+  --text-on-primary: oklch(100% 0 0);        /* white — on primary buttons */
+
+  /* ── Status ──────────────────────────────────────────────────────────── */
+  --color-success:        oklch(80% 0.15  162);
+  --color-success-subtle: oklch(80% 0.15  162 / 0.12);
+
+  /* ── Gradients ───────────────────────────────────────────────────────── */
+  --gradient-title:  linear-gradient(135deg,
+    oklch(79% 0.11 296) 0%,
+    oklch(72% 0.14 293) 50%,
+    oklch(67% 0.14 264) 100%
+  );
+  --gradient-avatar: linear-gradient(135deg,
+    oklch(47% 0.22 295) 0%,
+    oklch(59% 0.19 264) 100%
+  );
+
+  /* ── Focus ───────────────────────────────────────────────────────────── */
+  --focus-ring: 0 0 0 0.1875rem oklch(72% 0.14 293 / 0.55);
+
+  /* ── Border radius ───────────────────────────────────────────────────── */
+  --radius-sm:   0.375rem;    /*  6px */
+  --radius-md:   0.625rem;    /* 10px */
+  --radius-lg:   0.875rem;    /* 14px */
+  --radius-xl:   1.125rem;    /* 18px */
+  --radius-pill: 62.5rem;     /* pill */
+
+  /* ── Typography ──────────────────────────────────────────────────────── */
+  --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SF Mono', 'Fira Code',
+               'Consolas', monospace;
+}

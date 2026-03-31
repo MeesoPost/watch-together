@@ -2,26 +2,39 @@ import styles from '../styles/App.module.css';
 
 export default function Controls({ paused, position, onPlay, onPause, onSeek }) {
   return (
-    <div className={styles.controls}>
-      <button className={styles.btnControl} onClick={onPause} disabled={!paused ? false : true} title="Pause" style={{ display: paused ? 'none' : 'inline-flex' }}>
-        ⏸ Pause
+    <div className={styles.controls} role="group" aria-label="Playback controls">
+      <button
+        className={styles.btnPlayPause}
+        onClick={paused ? onPlay : onPause}
+        aria-label={paused ? 'Play' : 'Pause'}
+      >
+        {paused ? '▶ Play' : '⏸ Pause'}
       </button>
-      <button className={styles.btnControl} onClick={onPlay} style={{ display: paused ? 'inline-flex' : 'none' }}>
-        ▶ Play
+      <button
+        className={styles.btnSeek}
+        onClick={() => onSeek(Math.max(0, position - 10))}
+        aria-label="Rewind 10 seconds"
+      >
+        ⏪ −10s
       </button>
-      <button className={styles.btnControl} onClick={() => onSeek(Math.max(0, position - 10))}>
-        ⏪ -10s
-      </button>
-      <button className={styles.btnControl} onClick={() => onSeek(position + 10)}>
+      <button
+        className={styles.btnSeek}
+        onClick={() => onSeek(position + 10)}
+        aria-label="Forward 10 seconds"
+      >
         +10s ⏩
       </button>
-      <span className={styles.timeDisplay}>{formatTime(position)}</span>
+      <span className={styles.timeDisplay} aria-label={`Current position: ${formatTime(position)}`}>
+        {formatTime(position)}
+      </span>
     </div>
   );
 }
 
 function formatTime(s) {
-  const m = Math.floor(s / 60);
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
   const sec = Math.floor(s % 60);
-  return `${m}:${sec.toString().padStart(2, '0')}`;
+  if (h > 0) return `${h}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+  return `${m}:${String(sec).padStart(2, '0')}`;
 }
