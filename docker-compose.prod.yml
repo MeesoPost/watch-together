@@ -1,20 +1,15 @@
-version: '3.8'
-
 services:
-  backend:
-    build: ./backend
+  watch-together:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
     restart: unless-stopped
     ports:
-      - "3001:3001"
+      - "3002:3002"
+    env_file:
+      - .env
     environment:
       - NODE_ENV=production
-      - PORT=3001
-      - FRONTEND_URL=http://100.90.84.95:3000
-
-  frontend:
-    build: ./frontend
-    restart: unless-stopped
-    ports:
-      - "3000:3000"
-    depends_on:
-      - backend
+      - PORT=3002
+    volumes:
+      - /mnt/nas:/mnt/nas:ro

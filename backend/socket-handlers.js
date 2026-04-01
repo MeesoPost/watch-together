@@ -58,6 +58,8 @@ function registerSocketHandlers(io) {
         if (viewer) {
           sessionManager.removeViewer(session.id, socket.id);
           const count = sessionManager.getViewerCount(session.id);
+          sessionManager.updatePlaybackState(session.id, { paused: true });
+          io.to(session.id).emit('action:pause', { executedBy: 'system', timestamp: Date.now() });
           io.to(session.id).emit('session:userLeft', { username: viewer.username, count });
           io.to('lobby').emit('lobby:sessions', sessionManager.getPublicSessions());
           break;

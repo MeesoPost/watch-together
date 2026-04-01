@@ -2,11 +2,12 @@ const { v4: uuidv4 } = require('uuid');
 
 const sessions = new Map();
 
-function createSession({ mediaPath, title }) {
+function createSession({ mediaPath, streamPath, title }) {
   const id = `sess_${uuidv4().slice(0, 8)}`;
   const session = {
     id,
     mediaPath,
+    streamPath: streamPath || null,
     title: title || mediaPath.split('/').pop(),
     createdAt: Date.now(),
     viewers: [],

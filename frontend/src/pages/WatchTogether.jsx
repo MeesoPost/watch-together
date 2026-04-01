@@ -14,6 +14,7 @@ export default function WatchTogether() {
   const [participants, setParticipants] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [playbackState, setPlaybackState] = useState({ paused: true, position: 0 });
+  const [mpvClosed, setMpvClosed] = useState(false);
   const [usernameInput, setUsernameInput] = useState('');
   const [joined, setJoined] = useState(false);
   const socketRef = useRef(null);
@@ -69,6 +70,11 @@ export default function WatchTogether() {
 
   useEffect(() => {
     if (urlUsername) doJoin(urlUsername);
+
+    if (window.electronBridge) {
+      window.electronBridge.onMpvClosed(() => setMpvClosed(true));
+    }
+
     return () => disconnectSocket();
   }, []);
 
@@ -117,6 +123,20 @@ export default function WatchTogether() {
           <Participants participants={participants} />
         </div>
       </div>
+      {mpvClosed && (
+        <div className={styles.mpvClosedBanner}>
+          <span>MPV was closed</span>
+          <button
+            className={styles.btnPrimary}
+            onClick={() => {
+              window.electronBridge.reopenMpv(playbackState.position);
+              setMpvClosed(false);
+            }}
+          >
+            Reopen at {formatTime(playbackState.position)}
+          </button>
+        </div>
+      )}
       <div className={styles.notifications}>
         {notifications.map((n) => (
           <div key={n.id} className={styles.notification}>{n.msg}</div>

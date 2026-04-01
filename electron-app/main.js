@@ -1,4 +1,4 @@
-const { app, BrowserWindow, shell } = require('electron');
+const { app, BrowserWindow, shell, ipcMain } = require('electron');
 const { io } = require('socket.io-client');
 const net = require('net');
 const path = require('path');
@@ -33,11 +33,14 @@ let socket = null;
 let pendingUrl = null;
 let activeSessionId = null;   // prevent duplicate bridge starts
 let pendingLoadFile = null;   // file to load once MPV IPC is ready
+let pendingSeek = null;       // position to seek to after reopen
+let currentMediaUrl = null;   // last loaded file/URL, for reopen
 let suppressUntil = 0;        // suppress MPV events we caused ourselves
 let mpvBuffer = '';           // buffer for partial IPC messages
 let positionPollTimer = null;
 let lastKnownPosition = 0;
 let lastPositionTime = Date.now();
+let isQuitting = false;
 
 // ── MPV ───────────────────────────────────────────────────────────────────────
 
@@ -59,6 +62,9 @@ function startMpv() {
     console.log('[MPV] Exited');
     mpvProcess = null;
     mpvConnected = false;
+    if (!isQuitting && activeSessionId && win) {
+      win.webContents.send('mpv:closed');
+    }
   });
 
   // Give MPV a moment to create the socket, then connect
@@ -84,7 +90,14 @@ function connectMpvIpc() {
     // Send any file that was waiting for IPC to be ready
     if (pendingLoadFile) {
       sendMpv({ command: ['loadfile', pendingLoadFile, 'replace'] });
-      setTimeout(() => sendMpv({ command: ['set_property', 'pause', true] }), 300);
+      const seekTo = pendingSeek;
+      setTimeout(() => {
+        if (seekTo != null) {
+          sendMpv({ command: ['seek', seekTo, 'absolute'] });
+          pendingSeek = null;
+        }
+        sendMpv({ command: ['set_property', 'pause', true] });
+      }, 500);
       pendingLoadFile = null;
     }
   });
@@ -181,12 +194,16 @@ function startBridge(sessionId, serverUrl) {
 
   socket.on('session:joined', ({ session }) => {
     console.log('[Bridge] Joined:', session.title);
+    const mediaUrl = session.streamPath
+      ? `${serverUrl}${session.streamPath}`
+      : session.mediaPath;
+    currentMediaUrl = mediaUrl;
     if (mpvConnected) {
-      sendMpv({ command: ['loadfile', session.mediaPath, 'replace'] });
+      sendMpv({ command: ['loadfile', mediaUrl, 'replace'] });
       setTimeout(() => sendMpv({ command: ['set_property', 'pause', true] }), 300);
     } else {
       // IPC not ready yet — queue it, will fire on 'connect'
-      pendingLoadFile = session.mediaPath;
+      pendingLoadFile = mediaUrl;
     }
   });
 
@@ -237,12 +254,23 @@ function handleUrl(url) {
 
 // ── Window ────────────────────────────────────────────────────────────────────
 
+ipcMain.handle('mpv:reopen', (event, { position }) => {
+  console.log(`[IPC] Reopen MPV at ${Math.floor(position)}s`);
+  pendingLoadFile = currentMediaUrl;
+  pendingSeek = position;
+  startMpv();
+});
+
 function createWindow(url = 'http://localhost:3000') {
   win = new BrowserWindow({
     width: 1200,
     height: 800,
     title: 'Watch Together',
-    webPreferences: { nodeIntegration: false, contextIsolation: true },
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload.js'),
+    },
   });
 
   win.loadURL(url);
@@ -317,6 +345,7 @@ app.on('window-all-closed', () => {
 });
 
 app.on('will-quit', () => {
+  isQuitting = true;
   if (socket) socket.disconnect();
   if (mpvClient) mpvClient.destroy();
   if (mpvProcess) mpvProcess.kill();

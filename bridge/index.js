@@ -82,8 +82,11 @@ socket.on('connect', () => {
 
 socket.on('session:joined', ({ session }) => {
   console.log(`[Server] Joined session: ${session.title}`);
-  console.log(`[MPV] Loading file: ${session.mediaPath}`);
-  sendMpv({ command: ['loadfile', session.mediaPath, 'replace'] });
+  const mediaUrl = session.streamPath
+    ? `${serverUrl}${session.streamPath}`
+    : session.mediaPath;
+  console.log(`[MPV] Loading: ${mediaUrl}`);
+  sendMpv({ command: ['loadfile', mediaUrl, 'replace'] });
   // Start paused so everyone can sync before playing
   setTimeout(() => sendMpv({ command: ['set_property', 'pause', true] }), 500);
 });
