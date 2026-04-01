@@ -11,5 +11,6 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3002
+      - FRONTEND_URL=http://100.90.84.95:3002
     volumes:
       - /mnt/nas:/mnt/nas:ro
